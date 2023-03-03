@@ -2,9 +2,11 @@ import { useDispatch } from "react-redux";
 import { Modal } from "./Modal";
 import { toggleTodoComp } from "./store/todoSlice";
 import { useState } from "react";
+import React from "react";
 
-export function List({ todo }) {
+export const List = React.memo(function ({ todo }) {
 
+	console.log('render List');
 	const dispatch = useDispatch();
 	const [modalActive, setModalActive] = useState(false)
 
@@ -20,4 +22,4 @@ export function List({ todo }) {
 			<Modal todo={todo} modalActive={modalActive} setModalActive={setModalActive} />
 		</li>
 	)
-}
+})

@@ -6,6 +6,8 @@ import { addToDo } from "./store/todoSlice";
 
 export function Inputs() {
 
+	console.log('render inputs');
+
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [titleError, setTitleError] = useState(false);

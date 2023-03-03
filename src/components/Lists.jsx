@@ -4,6 +4,8 @@ import { List } from "./List";
 
 export function Lists() {
 
+	console.log('render ListS');
+
 	const todos = useSelector(state => state.todos.todos);
 
 	return (
