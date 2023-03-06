@@ -1,9 +1,6 @@
-import { useDispatch } from "react-redux"
-import { toggleTodoComp } from "./store/todoSlice";
 
-export function Modal({ todo, modalActive, setModalActive }) {
 
-	const dispatch = useDispatch();
+export function Modal({ todo, modalActive, changeStatus, setModalActive }) {
 
 	return (
 		<div className={modalActive ? "modal active" : "modal"} onClick={(event) => {
@@ -18,7 +15,7 @@ export function Modal({ todo, modalActive, setModalActive }) {
 				</div>
 				<div className="modal__status">
 					<label htmlFor="modalcb">Status:</label>
-					<input id="modalcb" className="modal__cbx" type="checkbox" checked={todo.status} onChange={() => dispatch(toggleTodoComp(todo.id))} />
+					<input id="modalcb" className="modal__cbx" type="checkbox" checked={todo.status} onChange={() => changeStatus()} />
 				</div>
 				<button className="modal__button" onClick={() => setModalActive(false)}>Cancel</button>
 			</div>

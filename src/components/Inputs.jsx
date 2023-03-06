@@ -1,41 +1,54 @@
 import { Input } from "./Input";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addToDo } from "./store/todoSlice";
+import React, { useRef, useState, useCallback } from "react";
 
+export const Inputs = React.memo(function ({ setTodos }) {
 
-export function Inputs() {
-
-	console.log('render inputs');
-
-	const [title, setTitle] = useState('');
-	const [description, setDescription] = useState('');
 	const [titleError, setTitleError] = useState(false);
 	const [descriptionError, setDescriptionError] = useState(false);
+	const titleRef = useRef();
+	const descRef = useRef();
 
-	const dispatch = useDispatch();
-
-	function newTodo() {
-		if (title.trim().length === 0) setTitleError(true)
-		if (description.trim().length === 0) setDescriptionError(true)
-		else if (!titleError && !descriptionError) {
-			dispatch(addToDo({ title, description }));
-			setTitle('');
-			setDescription('');
+	const newTodo = useCallback(function (event) {
+		event.preventDefault();
+		if (titleRef.current.value.length === 0) {
+			setTitleError(true);
 		}
-	}
+		if (descRef.current.value.length === 0) {
+			setDescriptionError(true);
+		} else if (titleRef.current.value.length > 0 && descRef.current.value.length > 0) {
+
+			setTodos(prev => {
+				function getId() {
+					const newId = Math.ceil(Math.random() * 100)
+					if (prev.find(todo => todo.id === newId)) getId()
+					else return newId;
+				}
+
+				return [...prev, {
+					id: getId(),
+					title: titleRef.current.value,
+					description: descRef.current.value,
+					status: false,
+				}]
+			})
+			// titleRef.current.value = '';
+			// descRef.current.value = '';
+			setTitleError(false);
+			setDescriptionError(false);
+		}
+	}, [setTodos])
 
 
 	return (
 		<div className="input">
 			<Input title="Title" error={titleError} setError={setTitleError}
-				value={title} setValue={setTitle}
+				propref={titleRef}
 			/>
 			<Input title="Description" error={descriptionError} setError={setDescriptionError}
-				value={description} setValue={setDescription}
+				propref={descRef}
 			/>
-			<button className="input__button" onClick={newTodo}>Create</button>
+			<button type="submit" className="input__button" onClick={event => newTodo(event)}>Create</button>
 		</div>
 
 	)
-}
+})
